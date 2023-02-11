@@ -1,3 +1,12 @@
+# 2.3.0
+
+* (bug) Drop auth-source-pass dependency.
+  Bump Emacs minor version requirement to emacs 26.
+
+# 2.2.0
+
+* (feature) Add command password-store-generate-no-symbols
+
 # 2.1.5
 
 * (bugfix) Fix an infloop on Windows enviroments.

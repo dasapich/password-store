@@ -4,9 +4,9 @@
 
 ;; Author: Svend Sorensen <svend@svends.net>
 ;; Maintainer: Tino Calancha <tino.calancha@gmail.com>
-;; Version: 2.1.4
+;; Version: 2.3.0
 ;; URL: https://www.passwordstore.org/
-;; Package-Requires: ((emacs "25") (s "1.9.0") (with-editor "2.5.11") (auth-source-pass "5.0.0"))
+;; Package-Requires: ((emacs "26") (s "1.9.0") (with-editor "2.5.11"))
 ;; Keywords: tools pass password password-store
 
 ;; This file is not part of GNU Emacs.
@@ -342,12 +342,31 @@ Separate multiple IDs with spaces."
 
 Default PASSWORD-LENGTH is `password-store-password-length'."
   (interactive (list (password-store--completing-read)
-                     (when current-prefix-arg
-                       (abs (prefix-numeric-value current-prefix-arg)))))
-  (unless password-length (setq password-length password-store-password-length))
+                     (and current-prefix-arg
+                          (abs (prefix-numeric-value current-prefix-arg)))))
   ;; A message with the output of the command is not printed because
   ;; the output contains the password.
-  (password-store--run-generate entry password-length t)
+  (password-store--run-generate
+   entry
+   (or password-length password-store-password-length)
+   'force)
+  nil)
+
+;;;###autoload
+(defun password-store-generate-no-symbols (entry &optional password-length)
+  "Generate a new password without symbols for ENTRY with PASSWORD-LENGTH.
+
+Default PASSWORD-LENGTH is `password-store-password-length'."
+  (interactive (list (password-store--completing-read)
+                     (and current-prefix-arg
+                          (abs (prefix-numeric-value current-prefix-arg)))))
+  
+  ;; A message with the output of the command is not printed because
+  ;; the output contains the password.
+  (password-store--run-generate
+   entry
+   (or password-length password-store-password-length)
+   'force 'no-symbols)
   nil)
 
 ;;;###autoload
